@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  sync-security-groups:
+    image: informaticanapresalesops.azurecr.io/sync-security-groups
+    build: .
