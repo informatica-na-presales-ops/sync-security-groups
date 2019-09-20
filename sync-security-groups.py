@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import apscheduler.schedulers.blocking
 import boto3
 import botocore.exceptions
 import datetime
@@ -18,6 +19,8 @@ class Config:
     log_level: str
     other_log_levels: dict = {}
     security_group_ids: list
+    sync_interval: int
+    sync_on_start: bool
     version: str
 
     def __init__(self):
@@ -28,6 +31,8 @@ class Config:
         self.log_format = os.getenv('LOG_FORMAT', '%(levelname)s [%(name)s] %(message)s')
         self.log_level = os.getenv('LOG_LEVEL', 'INFO')
         self.security_group_ids = os.getenv('SECURITY_GROUP_IDS', '').split()
+        self.sync_interval = int(os.getenv('SYNC_INTERVAL', '6'))
+        self.sync_on_start = os.getenv('SYNC_ON_START', 'True').lower() in _true_values
         self.version = os.getenv('APP_VERSION')
 
         for log_spec in os.getenv('OTHER_LOG_LEVELS', '').split():
@@ -112,6 +117,12 @@ def get_current_ip_list(config: Config) -> list:
     return [f'{ip}/32' for ip in ip_list]
 
 
+def main_job(config: Config):
+    current_list = get_current_ip_list(config)
+    for g in config.security_group_ids:
+        sync_security_group(config, g, current_list)
+
+
 def main():
     config = Config()
     logging.basicConfig(format=config.log_format, level=logging.DEBUG, stream=sys.stdout)
@@ -124,9 +135,14 @@ def main():
         log.debug(f'Changing log level for {logger} to {level}')
         logging.getLogger(logger).setLevel(level)
 
-    current_list = get_current_ip_list(config)
-    for g in config.security_group_ids:
-        sync_security_group(config, g, current_list)
+    log.info(f'SYNC_INTERVAL: {config.sync_interval}')
+    log.info(f'SYNC_ON_START: {config.sync_on_start}')
+
+    scheduler = apscheduler.schedulers.blocking.BlockingScheduler()
+    scheduler.add_job(main_job, 'interval', args=[config], hours=config.sync_interval)
+    if config.sync_on_start:
+        scheduler.add_job(main_job, args=[config])
+    scheduler.start()
 
 
 if __name__ == '__main__':

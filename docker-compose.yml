@@ -1,6 +1,7 @@
-version: '3'
+version: '3.7'
 
 services:
   sync-security-groups:
     image: informaticanapresalesops.azurecr.io/sync-security-groups
     build: .
+    init: true

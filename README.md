@@ -33,6 +33,12 @@ your security groups, set the environment variable `DRY_RUN="False"`.
 
 Provide your AWS credentials with the environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 
+When the tool starts, it will immediately perform a sync. It will then sleep for a certain number of hours before
+performing a sync again. The number of hours of sleep between syncs can be specified with the environment variable
+`SYNC_INTERVAL`. The default behavior is `SYNC_INTERVAL=6`, or to perform a sync every 6 hours.
+
+To disable the immediate sync when the tool is first started, set the environment variable `SYNC_ON_START=False`.
+
 All log messages are emitted on standard output (stdout). You can control the log format and level with the environment
 variables `LOG_FORMAT` and `LOG_LEVEL`. Defaults for these variables are:
 

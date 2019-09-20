@@ -13,12 +13,17 @@ ENV APP_VERSION="0.0.1" \
     LOG_LEVEL="INFO" \
     OTHER_LOG_LEVELS="" \
     PYTHONUNBUFFERED="1" \
-    SECURITY_GROUP_IDS=""
+    SECURITY_GROUP_IDS="" \
+    SYNC_INTERVAL="6" \
+    SYNC_ON_START="True" \
+    TZ="Etc/UTC"
 
-ENTRYPOINT ["/usr/local/bin/python"]
-CMD ["/sync-security-groups/sync-security-groups.py"]
+COPY sync-security-groups.py /sync-security-groups/sync-security-groups.py
 
 LABEL org.opencontainers.image.authors="William Jackson <wjackson@informatica.com>" \
       org.opencontainers.image.version=${APP_VERSION}
 
-COPY sync-security-groups.py /sync-security-groups/sync-security-groups.py
+ENTRYPOINT ["/usr/local/bin/python"]
+CMD ["/sync-security-groups/sync-security-groups.py"]
+
+USER nobody
