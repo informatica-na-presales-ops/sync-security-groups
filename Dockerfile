@@ -4,7 +4,7 @@ COPY requirements.txt /sync-security-groups/requirements.txt
 
 RUN /usr/local/bin/pip install --no-cache-dir --requirement /sync-security-groups/requirements.txt
 
-ENV APP_VERSION="0.0.1" \
+ENV APP_VERSION="0.1.0" \
     AWS_ACCESS_KEY_ID="" \
     AWS_SECRET_ACCESS_KEY="" \
     DRY_RUN="True" \
