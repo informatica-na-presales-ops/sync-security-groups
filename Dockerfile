@@ -4,7 +4,7 @@ COPY requirements.txt /sync-security-groups/requirements.txt
 
 RUN /usr/local/bin/pip install --no-cache-dir --requirement /sync-security-groups/requirements.txt
 
-ENV APP_VERSION="0.1.0" \
+ENV APP_VERSION="2019.1" \
     AWS_ACCESS_KEY_ID="" \
     AWS_SECRET_ACCESS_KEY="" \
     DRY_RUN="True" \
@@ -22,7 +22,7 @@ ENV APP_VERSION="0.1.0" \
 COPY sync-security-groups.py /sync-security-groups/sync-security-groups.py
 
 LABEL org.opencontainers.image.authors="William Jackson <wjackson@informatica.com>" \
-      org.opencontainers.image.version=${APP_VERSION}
+      org.opencontainers.image.version="${APP_VERSION}"
 
 ENTRYPOINT ["/usr/local/bin/python"]
 CMD ["/sync-security-groups/sync-security-groups.py"]
