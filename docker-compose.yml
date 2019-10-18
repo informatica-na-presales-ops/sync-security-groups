@@ -2,6 +2,6 @@ version: '3.7'
 
 services:
   sync-security-groups:
-    image: informaticanapresalesops.azurecr.io/sync-security-groups
+    image: docker.pkg.github.com/informatica-na-presales-ops/sync-security-groups/sync-security-groups
     build: .
     init: true
