@@ -5,8 +5,10 @@ This tool can be used to automatically update one or more AWS security groups to
 Security group rules that specify other security groups instead of IP ranges will not be affected.
 
 To find the desired list of IP addresses, the tool will perform an HTTP GET request to the URL that is specified in the
-environment variable `IP_LIST_SOURCE`. The document at this URL should be simple text, one IP address per line, like
-this:
+environment variable `IP_LIST_SOURCE`.
+
+If the environment variable `IP_LIST_FORMAT` is `plain`, the document at the source URL should be simple text, one IP
+address per line, like this:
 
     1.2.3.4
     5.6.7.8
@@ -15,6 +17,10 @@ this:
 For each IP address in this list, the tool will create a security group rule granting ingress for all protocols on all
 ports from the IP address (the /32 subnet). Any existing IP address rules in the security group that do not match this
 list will be removed from the security group.
+
+If the environment variable `IP_LIST_FORMAT` is `aws`, then set `IP_LIST_SOURCE` to
+`https://ip-ranges.amazonaws.com/ip-ranges.json` (or a similar document) and the tool will extract all IPv4 address
+ranges for the `ROUTE53_HEALTHCHECKS` service.
 
 To specify which AWS security groups to update, use the environment variable `SECURITY_GROUP_IDS`. The format of this
 variable is:

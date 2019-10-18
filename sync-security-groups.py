@@ -14,6 +14,7 @@ log = logging.getLogger(__name__)
 
 class Config:
     dry_run: bool
+    ip_list_format: str
     ip_list_source: str
     log_format: str
     log_level: str
@@ -27,6 +28,7 @@ class Config:
         _true_values = ('true', '1', 'yes', 'on')
 
         self.dry_run = os.getenv('DRY_RUN', 'True').lower() in _true_values
+        self.ip_list_format = os.getenv('IP_LIST_FORMAT')
         self.ip_list_source = os.getenv('IP_LIST_SOURCE')
         self.log_format = os.getenv('LOG_FORMAT', '%(levelname)s [%(name)s] %(message)s')
         self.log_level = os.getenv('LOG_LEVEL', 'INFO')
@@ -111,10 +113,16 @@ def sync_security_group(config: Config, group_spec: str, new_list: list):
 def get_current_ip_list(config: Config) -> list:
     resp = requests.get(config.ip_list_source)
     resp.raise_for_status()
-    ip_list = resp.text.splitlines()
-    log.info(f'The current IP list has {len(ip_list)} items')
-    log.debug(f'Current IP list: {ip_list}')
-    return [f'{ip}/32' for ip in ip_list]
+    if config.ip_list_format == 'plain':
+        ip_list = resp.text.splitlines()
+        log.info(f'The current IP list has {len(ip_list)} items')
+        log.debug(f'Current IP list: {ip_list}')
+        return [f'{ip}/32' for ip in ip_list]
+    elif config.ip_list_format == 'aws':
+        ip_list = resp.json()
+        return [i.get('ip_prefix') for i in ip_list.get('prefixes')
+                if 'ip_prefix' in i and i.get('service') == 'ROUTE53_HEALTHCHECKS']
+    return []
 
 
 def main_job(config: Config):

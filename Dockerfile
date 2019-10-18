@@ -8,6 +8,7 @@ ENV APP_VERSION="0.1.0" \
     AWS_ACCESS_KEY_ID="" \
     AWS_SECRET_ACCESS_KEY="" \
     DRY_RUN="True" \
+    IP_LIST_FORMAT="" \
     IP_LIST_SOURCE="" \
     LOG_FORMAT="%(levelname)s [%(name)s] %(message)s" \
     LOG_LEVEL="INFO" \
