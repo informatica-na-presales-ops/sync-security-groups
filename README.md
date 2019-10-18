@@ -19,8 +19,10 @@ ports from the IP address (the /32 subnet). Any existing IP address rules in the
 list will be removed from the security group.
 
 If the environment variable `IP_LIST_FORMAT` is `aws`, then set `IP_LIST_SOURCE` to
-`https://ip-ranges.amazonaws.com/ip-ranges.json` (or a similar document) and the tool will extract all IPv4 address
+[`https://ip-ranges.amazonaws.com/ip-ranges.json`][a] (or a similar document) and the tool will extract all IPv4 address
 ranges for the `ROUTE53_HEALTHCHECKS` service.
+
+[a]: https://ip-ranges.amazonaws.com/ip-ranges.json
 
 To specify which AWS security groups to update, use the environment variable `SECURITY_GROUP_IDS`. The format of this
 variable is:
@@ -51,8 +53,8 @@ variables `LOG_FORMAT` and `LOG_LEVEL`. Defaults for these variables are:
     LOG_FORMAT="%(levelname)s [%(name)s] %(message)s"
     LOG_LEVEL="INFO"
 
-To see all available placeholders for `LOG_FORMAT`, refer to [LogRecord attributes][a]. `LOG_LEVEL` can be any of
-Python's default [logging levels][b].
+To see all available placeholders for `LOG_FORMAT`, refer to [LogRecord attributes][b]. `LOG_LEVEL` can be any of
+Python's default [logging levels][c].
 
-[a]: https://docs.python.org/3/library/logging.html#logrecord-attributes
-[b]: https://docs.python.org/3/library/logging.html#levels
+[b]: https://docs.python.org/3/library/logging.html#logrecord-attributes
+[c]: https://docs.python.org/3/library/logging.html#levels
