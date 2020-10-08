@@ -1,7 +1,6 @@
-version: '3.7'
+version: '3.8'
 
 services:
   sync-security-groups:
-    image: docker.pkg.github.com/informatica-na-presales-ops/sync-security-groups/sync-security-groups
-    build: .
+    image: ghcr.io/informatica-na-presales-ops/sync-security-groups
     init: true
