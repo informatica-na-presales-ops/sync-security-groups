@@ -1,3 +1,3 @@
 APScheduler==3.6.3
-boto3==1.16.23
+boto3==1.16.25
 requests==2.25.0
