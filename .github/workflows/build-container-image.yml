@@ -32,7 +32,7 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/sync-security-groups
           registry: ghcr.io
-          username: ${{ secrets.ghcr_username }}
-          password: ${{ secrets.ghcr_token }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
           tag_with_ref: true
           add_git_labels: true
