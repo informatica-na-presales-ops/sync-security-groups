@@ -1,8 +1,14 @@
 FROM python:3.9.5-alpine3.13
 
-COPY requirements.txt /sync-security-groups/requirements.txt
+RUN /usr/sbin/adduser -g python -D python
 
-RUN /usr/local/bin/pip install --no-cache-dir --requirement /sync-security-groups/requirements.txt
+USER python
+RUN /usr/local/bin/python -m venv /home/python/venv
+
+WORKDIR /home/python/sync-security-groups
+
+COPY --chown=python:python requirements.txt /home/python/sync-security-groups/requirements.txt
+RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/sync-security-groups/requirements.txt
 
 ENV APP_VERSION="2019.1" \
     AWS_ACCESS_KEY_ID="" \
@@ -13,18 +19,18 @@ ENV APP_VERSION="2019.1" \
     LOG_FORMAT="%(levelname)s [%(name)s] %(message)s" \
     LOG_LEVEL="INFO" \
     OTHER_LOG_LEVELS="" \
+    PATH="/home/python/venv/bin:${PATH}" \
     PYTHONUNBUFFERED="1" \
     SECURITY_GROUP_IDS="" \
     SYNC_INTERVAL="6" \
     SYNC_ON_START="True" \
     TZ="Etc/UTC"
 
-COPY sync-security-groups.py /sync-security-groups/sync-security-groups.py
+ENTRYPOINT ["/home/python/venv/bin/python"]
+CMD ["/home/python/sync-security-groups/sync-security-groups.py"]
 
 LABEL org.opencontainers.image.authors="William Jackson <wjackson@informatica.com>" \
+      org.opencontainers.image.source="https://github.com/informatica-na-presales-ops/sync-security-groups" \
       org.opencontainers.image.version="${APP_VERSION}"
 
-ENTRYPOINT ["/usr/local/bin/python"]
-CMD ["/sync-security-groups/sync-security-groups.py"]
-
-USER nobody
+COPY sync-security-groups.py /home/python/sync-security-groups/sync-security-groups.py
