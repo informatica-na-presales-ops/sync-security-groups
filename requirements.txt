@@ -8,7 +8,7 @@
 
 apscheduler==3.7.0
     # via -r requirements.in
-boto3==1.17.93
+boto3==1.17.97
     # via -r requirements.in
 botocore==1.20.97
     # via
