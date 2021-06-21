@@ -1,0 +1,5 @@
+--extra-index-url https://alpine-wheels.github.io/index
+
+apscheduler
+boto3
+requests
