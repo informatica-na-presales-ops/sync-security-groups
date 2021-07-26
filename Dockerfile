@@ -10,7 +10,7 @@ WORKDIR /home/python/sync-security-groups
 COPY --chown=python:python requirements.txt /home/python/sync-security-groups/requirements.txt
 RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/sync-security-groups/requirements.txt
 
-ENV APP_VERSION="2019.1" \
+ENV APP_VERSION="2021.1" \
     AWS_ACCESS_KEY_ID="" \
     AWS_SECRET_ACCESS_KEY="" \
     DRY_RUN="True" \
