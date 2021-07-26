@@ -33,4 +33,4 @@ LABEL org.opencontainers.image.authors="William Jackson <wjackson@informatica.co
       org.opencontainers.image.source="https://github.com/informatica-na-presales-ops/sync-security-groups" \
       org.opencontainers.image.version="${APP_VERSION}"
 
-COPY sync-security-groups.py /home/python/sync-security-groups/sync-security-groups.py
+COPY --chown=python:python sync-security-groups.py /home/python/sync-security-groups/sync-security-groups.py
