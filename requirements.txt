@@ -30,7 +30,7 @@ pytz==2021.1
     # via
     #   apscheduler
     #   tzlocal
-requests==2.28.0
+requests==2.28.1
     # via -r requirements.in
 s3transfer==0.6.0
     # via boto3
