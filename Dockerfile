@@ -22,8 +22,6 @@ ENV APP_VERSION="2021.2" \
     PATH="/home/python/venv/bin:${PATH}" \
     PYTHONUNBUFFERED="1" \
     SECURITY_GROUP_IDS="" \
-    SYNC_INTERVAL="6" \
-    SYNC_ON_START="True" \
     TZ="Etc/UTC"
 
 ENTRYPOINT ["/home/python/venv/bin/python"]

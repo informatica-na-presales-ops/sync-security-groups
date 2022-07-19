@@ -8,6 +8,7 @@ import logging
 import os
 import requests
 import sys
+import time
 
 log = logging.getLogger(__name__)
 
@@ -19,9 +20,9 @@ class Config:
     log_format: str
     log_level: str
     other_log_levels: dict = {}
+    repeat: bool
+    repeat_interval_hours: int
     security_group_ids: list
-    sync_interval: int
-    sync_on_start: bool
     version: str
 
     def __init__(self):
@@ -32,14 +33,22 @@ class Config:
         self.ip_list_source = os.getenv('IP_LIST_SOURCE')
         self.log_format = os.getenv('LOG_FORMAT', '%(levelname)s [%(name)s] %(message)s')
         self.log_level = os.getenv('LOG_LEVEL', 'INFO')
+        self.repeat = os.getenv('REPEAT', 'false') in _true_values
+        self.repeat_interval_hours = int(os.getenv('REPEAT_INTERVAL_HOURS', '6'))
         self.security_group_ids = os.getenv('SECURITY_GROUP_IDS', '').split()
-        self.sync_interval = int(os.getenv('SYNC_INTERVAL', '6'))
-        self.sync_on_start = os.getenv('SYNC_ON_START', 'True').lower() in _true_values
         self.version = os.getenv('APP_VERSION')
 
         for log_spec in os.getenv('OTHER_LOG_LEVELS', '').split():
             logger, _, level = log_spec.partition(':')
             self.other_log_levels[logger] = level
+
+
+def human_duration(duration: int) -> str:
+    if duration > 60:
+        minutes = duration // 60
+        seconds = duration % 60
+        return f'{minutes}m{seconds}s'
+    return f'{duration}s'
 
 
 def sync_security_group(config: Config, group_spec: str, new_list: list):
@@ -126,9 +135,19 @@ def get_current_ip_list(config: Config) -> list:
 
 
 def main_job(config: Config):
+    main_job_start = time.monotonic()
+    log.info('Running the main job')
     current_list = get_current_ip_list(config)
     for g in config.security_group_ids:
         sync_security_group(config, g, current_list)
+
+    if config.repeat:
+        repeat_message = f'see you again in {config.repeat_interval_hours} hours'
+    else:
+        repeat_message = 'quitting'
+
+    main_job_duration = int(time.monotonic() - main_job_start)
+    log.info(f'Main job completed in {human_duration(main_job_duration)}, {repeat_message}')
 
 
 def main():
@@ -143,14 +162,15 @@ def main():
         log.debug(f'Changing log level for {logger} to {level}')
         logging.getLogger(logger).setLevel(level)
 
-    log.info(f'SYNC_INTERVAL: {config.sync_interval}')
-    log.info(f'SYNC_ON_START: {config.sync_on_start}')
-
-    scheduler = apscheduler.schedulers.blocking.BlockingScheduler()
-    scheduler.add_job(main_job, 'interval', args=[config], hours=config.sync_interval)
-    if config.sync_on_start:
+    if config.repeat:
+        log.info(f'This job will repeat every {config.repeat_interval_hours} hours')
+        log.info('Change this value by setting the REPEAT_INTERVAL_HOURS environment variable')
+        scheduler = apscheduler.schedulers.blocking.BlockingScheduler()
+        scheduler.add_job(main_job, 'interval', args=[config], hours=config.repeat_interval_hours)
         scheduler.add_job(main_job, args=[config])
-    scheduler.start()
+        scheduler.start()
+    else:
+        main_job(config)
 
 
 if __name__ == '__main__':
