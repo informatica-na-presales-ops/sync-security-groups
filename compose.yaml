@@ -1,4 +1,8 @@
 services:
-  sync-security-groups:
+  shell:
+    entrypoint:
+      - /bin/sh
     image: ghcr.io/informatica-na-presales-ops/sync-security-groups
     init: true
+    volumes:
+      - ./:/home/python/sync-security-groups
