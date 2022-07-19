@@ -8,6 +8,7 @@ import logging
 import notch
 import os
 import requests
+import signal
 import sys
 import time
 
@@ -155,5 +156,10 @@ def main():
         main_job(config)
 
 
+def handle_sigterm(_signal, _frame):
+    sys.exit()
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, handle_sigterm)
     main()
