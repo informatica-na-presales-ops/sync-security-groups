@@ -24,6 +24,12 @@ ranges for the `ROUTE53_HEALTHCHECKS` service.
 
 [a]: https://ip-ranges.amazonaws.com/ip-ranges.json
 
+By default, the IP address list must contain at least 10 items. If the list does not contain enough items, the tool will
+not continue to update security groups. You can change the minimum number of IP addresses required in the list by
+setting the `IP_LIST_MIN_LENGTH` environment variable. For example:
+
+    IP_LIST_MIN_LENGTH="80"
+
 To specify which AWS security groups to update, use the environment variable `SECURITY_GROUP_IDS`. The format of this
 variable is:
 
@@ -44,7 +50,7 @@ Provide your AWS credentials with the environment variables `AWS_ACCESS_KEY_ID` 
 When the tool starts, it will immediately perform a sync, then quit. If you want the tool to sleep and perform a sync
 every few hours, set the environment variable `REPEAT="True"`. It will then sleep for a certain number of hours before
 performing a sync again. The number of hours of sleep between syncs can be specified with the environment variable
-`REPEAT_INTERVAL_HOURS`. The default behavior is `REPEAT_INTERVAL_HOURS=6`, or to perform a sync every 6 hours.
+`REPEAT_INTERVAL_HOURS`. The default behavior is `REPEAT_INTERVAL_HOURS="6"`, or to perform a sync every 6 hours.
 
 All log messages are emitted on standard output (stdout). You can control the log format and level with the environment
 variables `LOG_FORMAT` and `LOG_LEVEL`. Defaults for these variables are:

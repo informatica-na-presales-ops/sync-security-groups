@@ -18,6 +18,7 @@ log = notch.make_log('sync_security_groups')
 class Config:
     dry_run: bool
     ip_list_format: str
+    ip_list_min_length: int
     ip_list_source: str
     repeat: bool
     repeat_interval_hours: int
@@ -29,6 +30,7 @@ class Config:
 
         self.dry_run = os.getenv('DRY_RUN', 'True').lower() in _true_values
         self.ip_list_format = os.getenv('IP_LIST_FORMAT')
+        self.ip_list_min_length = int(os.getenv('IP_LIST_MIN_LENGTH', '10'))
         self.ip_list_source = os.getenv('IP_LIST_SOURCE')
         self.repeat = os.getenv('REPEAT', 'false') in _true_values
         self.repeat_interval_hours = int(os.getenv('REPEAT_INTERVAL_HOURS', '6'))
@@ -130,9 +132,13 @@ def get_current_ip_list(config: Config) -> list:
 def main_job(config: Config):
     main_job_start = time.monotonic()
     log.info('Running the main job')
+
     current_list = get_current_ip_list(config)
-    for g in config.security_group_ids:
-        sync_security_group(config, g, current_list)
+    if len(current_list) < config.ip_list_min_length:
+        log.warning(f'Cannot continue because IP list length is less than {config.ip_list_min_length}')
+    else:
+        for g in config.security_group_ids:
+            sync_security_group(config, g, current_list)
 
     if config.repeat:
         repeat_message = f'see you again in {config.repeat_interval_hours} hours'
