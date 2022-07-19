@@ -5,21 +5,19 @@ import boto3
 import botocore.exceptions
 import datetime
 import logging
+import notch
 import os
 import requests
 import sys
 import time
 
-log = logging.getLogger(__name__)
+log = notch.make_log('sync_security_groups')
 
 
 class Config:
     dry_run: bool
     ip_list_format: str
     ip_list_source: str
-    log_format: str
-    log_level: str
-    other_log_levels: dict = {}
     repeat: bool
     repeat_interval_hours: int
     security_group_ids: list
@@ -31,16 +29,10 @@ class Config:
         self.dry_run = os.getenv('DRY_RUN', 'True').lower() in _true_values
         self.ip_list_format = os.getenv('IP_LIST_FORMAT')
         self.ip_list_source = os.getenv('IP_LIST_SOURCE')
-        self.log_format = os.getenv('LOG_FORMAT', '%(levelname)s [%(name)s] %(message)s')
-        self.log_level = os.getenv('LOG_LEVEL', 'INFO')
         self.repeat = os.getenv('REPEAT', 'false') in _true_values
         self.repeat_interval_hours = int(os.getenv('REPEAT_INTERVAL_HOURS', '6'))
         self.security_group_ids = os.getenv('SECURITY_GROUP_IDS', '').split()
         self.version = os.getenv('APP_VERSION')
-
-        for log_spec in os.getenv('OTHER_LOG_LEVELS', '').split():
-            logger, _, level = log_spec.partition(':')
-            self.other_log_levels[logger] = level
 
 
 def human_duration(duration: int) -> str:
@@ -152,16 +144,6 @@ def main_job(config: Config):
 
 def main():
     config = Config()
-    logging.basicConfig(format=config.log_format, level=logging.DEBUG, stream=sys.stdout)
-    log.debug(f'sync-security-groups {config.version}')
-    if not config.log_level == 'DEBUG':
-        log.debug(f'Changing log level to {config.log_level}')
-    logging.getLogger().setLevel(config.log_level)
-
-    for logger, level in config.other_log_levels.items():
-        log.debug(f'Changing log level for {logger} to {level}')
-        logging.getLogger(logger).setLevel(level)
-
     if config.repeat:
         log.info(f'This job will repeat every {config.repeat_interval_hours} hours')
         log.info('Change this value by setting the REPEAT_INTERVAL_HOURS environment variable')
