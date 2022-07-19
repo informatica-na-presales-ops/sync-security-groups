@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   sync-security-groups:
     image: ghcr.io/informatica-na-presales-ops/sync-security-groups
