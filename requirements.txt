@@ -6,7 +6,7 @@
 #
 --extra-index-url https://alpine-wheels.github.io/index
 
-apscheduler==3.9.1.post1
+apscheduler==3.10.0
     # via -r requirements.in
 boto3==1.26.59
     # via -r requirements.in
