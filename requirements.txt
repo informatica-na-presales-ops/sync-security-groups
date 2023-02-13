@@ -8,9 +8,9 @@
 
 apscheduler==3.10.0
     # via -r requirements.in
-boto3==1.26.65
+boto3==1.26.69
     # via -r requirements.in
-botocore==1.29.65
+botocore==1.29.69
     # via
     #   boto3
     #   s3transfer
