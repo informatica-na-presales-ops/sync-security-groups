@@ -1,4 +1,4 @@
-FROM python:3.11.2-alpine3.17
+FROM python:3.11-alpine
 
 RUN /usr/sbin/adduser -g python -D python
 
@@ -11,8 +11,6 @@ COPY --chown=python:python requirements.txt /home/python/sync-security-groups/re
 RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/sync-security-groups/requirements.txt
 
 ENV APP_VERSION="2022.1" \
-    AWS_ACCESS_KEY_ID="" \
-    AWS_SECRET_ACCESS_KEY="" \
     DRY_RUN="True" \
     IP_LIST_FORMAT="plain" \
     IP_LIST_SOURCE="" \
@@ -27,8 +25,7 @@ ENV APP_VERSION="2022.1" \
 ENTRYPOINT ["/home/python/venv/bin/python"]
 CMD ["/home/python/sync-security-groups/sync-security-groups.py"]
 
-LABEL org.opencontainers.image.authors="William Jackson <wjackson@informatica.com>" \
-      org.opencontainers.image.source="https://github.com/informatica-na-presales-ops/sync-security-groups" \
+LABEL org.opencontainers.image.source="https://github.com/informatica-na-presales-ops/sync-security-groups" \
       org.opencontainers.image.version="${APP_VERSION}"
 
 COPY --chown=python:python sync-security-groups.py /home/python/sync-security-groups/sync-security-groups.py
