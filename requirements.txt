@@ -6,7 +6,7 @@
 #
 --extra-index-url https://alpine-wheels.github.io/index
 
-apscheduler==3.10.0
+apscheduler==3.10.4
     # via -r requirements.in
 boto3==1.26.69
     # via -r requirements.in
@@ -48,6 +48,3 @@ urllib3==1.26.10
     # via
     #   botocore
     #   requests
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
