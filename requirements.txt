@@ -30,8 +30,6 @@ python-dateutil==2.8.2
     # via botocore
 pytz==2024.1
     # via apscheduler
-pytz-deprecation-shim==0.1.0.post0
-    # via tzlocal
 requests==2.32.3
     # via -r requirements.in
 s3transfer==0.10.2
@@ -40,9 +38,7 @@ six==1.16.0
     # via
     #   apscheduler
     #   python-dateutil
-tzdata==2024.1
-    # via pytz-deprecation-shim
-tzlocal==4.2
+tzlocal==5.2
     # via apscheduler
 urllib3==2.2.2
     # via
