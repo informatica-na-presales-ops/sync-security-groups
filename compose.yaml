@@ -1,9 +1,8 @@
 services:
   shell:
-    build: .
     entrypoint:
       - /bin/sh
-    image: 368099029718.dkr.ecr.us-west-2.amazonaws.com/sync-security-groups
+    image: ghcr.io/informatica-na-presales-ops/sync-security-groups:latest
     init: true
     volumes:
       - ./:/home/python/sync-security-groups
