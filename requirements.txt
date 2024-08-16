@@ -34,7 +34,7 @@ pytz-deprecation-shim==0.1.0.post0
     # via tzlocal
 requests==2.32.3
     # via -r requirements.in
-s3transfer==0.6.0
+s3transfer==0.6.2
     # via boto3
 six==1.16.0
     # via
