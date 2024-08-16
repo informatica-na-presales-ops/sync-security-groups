@@ -28,7 +28,7 @@ notch==2023.1
     # via -r requirements.in
 python-dateutil==2.8.2
     # via botocore
-pytz==2022.1
+pytz==2024.1
     # via apscheduler
 pytz-deprecation-shim==0.1.0.post0
     # via tzlocal
