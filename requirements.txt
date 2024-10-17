@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
---extra-index-url https://alpine-wheels.github.io/index
-
 apscheduler==3.10.4
     # via -r requirements.in
 boto3==1.35.39
