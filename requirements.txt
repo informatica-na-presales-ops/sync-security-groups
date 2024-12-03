@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-apscheduler==3.10.4
+apscheduler==3.11.0
     # via -r requirements.in
 boto3==1.35.63
     # via -r requirements.in
@@ -26,16 +26,12 @@ notch==2023.1
     # via -r requirements.in
 python-dateutil==2.9.0.post0
     # via botocore
-pytz==2024.2
-    # via apscheduler
 requests==2.32.3
     # via -r requirements.in
 s3transfer==0.10.4
     # via boto3
 six==1.16.0
-    # via
-    #   apscheduler
-    #   python-dateutil
+    # via python-dateutil
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.3
